@@ -1,0 +1,10 @@
+// Cannot cast
+
+class A {}
+
+
+int main() {
+    A b = (int) null;
+
+    return 0;
+}

@@ -1,0 +1,13 @@
+// Argument mismatch
+
+class A {}
+
+class B extends A {}
+
+int main() {
+    foo(new A);
+
+    return 0;
+}
+
+void foo(B b) {}

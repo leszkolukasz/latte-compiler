@@ -1,0 +1,29 @@
+class A {
+    int x;
+
+    void print() {
+      printInt(x);
+    }
+}
+
+class B extends A {
+    int x;
+    
+    void print() {
+      printInt(cast<A>(self).x);
+    }
+}
+
+int main() {
+    B b = new B;
+    b.x = 1; // x z klasy B
+    cast<A>(b).x = 2; // x z klasy A
+
+    printInt(b.x);
+    printInt(cast<A>(b).x);
+
+    b.print();
+    cast<A>(b).print();
+
+    return 0;
+}

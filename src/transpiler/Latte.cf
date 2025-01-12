@@ -1,0 +1,101 @@
+-- programs ------------------------------------------------
+
+entrypoints Program ;
+
+Program.                Program ::= [TopDef] ;
+TopFnDef.	            TopDef ::= FnDef ;
+TopClassDef.            TopDef ::= "class" Ident "{" [ClassMember] "}" ;
+TopClassDefWithInher.   TopDef ::= "class" Ident "extends" Ident "{" [ClassMember] "}" ;
+
+FnDef.         FnDef    ::= Type Ident "(" [Arg] ")" Block ;
+Arg. 	       Arg      ::= Type Ident ;
+
+Field.         ClassMember ::= Type Ident ";" ;
+Method.        ClassMember ::= FnDef ;
+
+separator nonempty TopDef "" ;
+separator Arg "," ;
+separator ClassMember "" ;
+
+-- statements ----------------------------------------------
+
+Block.     Block ::= "{" [Stmt] "}" ;
+Empty.     Stmt ::= ";" ;
+BStmt.     Stmt ::= Block ;
+Decl.      Stmt ::= Type [Item] ";" ;
+NoInit.    Item ::= Ident ;
+Init.      Item ::= Ident "=" Expr ;
+
+separator  Stmt "" ;
+separator nonempty Item "," ;
+
+Ass.       Stmt ::= Expr "=" Expr  ";" ;
+Incr.      Stmt ::= Expr "++"  ";" ;
+Decr.      Stmt ::= Expr "--"  ";" ;
+Ret.       Stmt ::= "return" Expr ";" ;
+VRet.      Stmt ::= "return" ";" ;
+Cond.      Stmt ::= "if" "(" Expr ")" Stmt  ;  -- conflict 1
+CondElse.  Stmt ::= "if" "(" Expr ")" Stmt "else" Stmt  ; -- conflict 1
+While.     Stmt ::= "while" "(" Expr ")" Stmt ;
+For.       Stmt ::= "for" "(" Type Ident ":" Expr ")" Stmt ;
+SExp.      Stmt ::= Expr  ";" ;
+
+-- Types ---------------------------------------------------
+
+Int.       Type ::= "int" ;
+charT.      Type ::= "char" ;
+Str.       Type ::= "string" ;
+Bool.      Type ::= "boolean" ;
+Void.      Type ::= "void" ;
+Array.     Type ::= Type "[]" ;
+Class.     Type ::= Ident ;
+internal   Fun. Type ::= Type "(" [Type] ")" ;
+
+define charT = Bool ;
+
+separator  Type "," ;
+
+-- Expressions ---------------------------------------------
+
+EVar.               Expr7 ::= Ident ;
+ELitInt.            Expr7 ::= Integer ;
+ELitNull.           Expr7 ::= "null" ;
+ELitTrue.           Expr7 ::= "true" ;
+ELitFalse.          Expr7 ::= "false" ;
+EString.            Expr7 ::= String ;
+ECast.              Expr7 ::= "cast<" Type ">" "(" Expr  ")";
+ENewObject.         Expr7 ::= "new" Type;                   -- conflict 2
+ENewArray.          Expr7 ::= "new" Type "[" Expr "]" ;     -- conflict 2
+EApp.               Expr6 ::= Expr6 "(" [Expr] ")" ;
+EMember.            Expr6 ::= Expr6 "." Ident ;
+EIndex.             Expr6 ::= Expr6 "[" Expr "]" ;          -- conflict 2 // ENewObject + EIndex or ENewArray
+Neg.                Expr5 ::= "-" Expr6 ;
+Not.                Expr5 ::= "!" Expr6 ;
+EMul.               Expr4 ::= Expr4 MulOp Expr5 ;
+EAdd.               Expr3 ::= Expr3 AddOp Expr4 ;
+ERel.               Expr2 ::= Expr2 RelOp Expr3 ;
+EAnd.               Expr1 ::= Expr2 "&&" Expr1 ;
+EOr.                Expr ::= Expr1 "||" Expr ;
+
+coercions  Expr 7 ;
+separator  Expr "," ;
+
+-- operators -----------------------------------------------
+
+Plus.      AddOp ::= "+" ;
+Minus.     AddOp ::= "-" ;
+Times.     MulOp ::= "*" ;
+Div.       MulOp ::= "/" ;
+Mod.       MulOp ::= "%" ;
+LTH.       RelOp ::= "<" ;
+LE.        RelOp ::= "<=" ;
+GTH.       RelOp ::= ">" ;
+GE.        RelOp ::= ">=" ;
+EQU.       RelOp ::= "==" ;
+NE.        RelOp ::= "!=" ;
+
+-- comments ------------------------------------------------
+
+comment    "#" ;
+comment    "//" ;
+comment    "/*" "*/" ;

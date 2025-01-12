@@ -1,0 +1,42 @@
+class A {
+  int x;
+}
+class B extends A {
+  int global_test(int x) {
+    return global();
+  }
+
+  int foo(string x) {
+    return self.global_test(self.x);
+  }
+}
+class C1 extends B {}
+class C2 extends B {}
+
+int global() {
+  return 10;
+}
+
+int main() {
+    A a = foo1(new C2);
+
+    if (true) int x = 10;
+    int x = 11;
+
+    string s = "abc";
+    for (char c: s) printChar(c);
+
+    if (1 / 42 == 42) return 0;
+    else {
+      if ("4"+"2" == "42") return 0;
+    }
+}
+
+A foo1(A a) {
+  return foo2(true);
+}
+
+B foo2(boolean x) {
+  if (x) return new C1;
+  return new C2;
+}

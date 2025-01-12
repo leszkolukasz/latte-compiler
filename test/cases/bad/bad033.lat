@@ -1,0 +1,9 @@
+// Conflicting return type
+
+int foo() {
+    return "42";
+}
+
+int main() {
+    return 0;
+}

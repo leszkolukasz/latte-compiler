@@ -1,0 +1,4 @@
+int main() {
+     "abc" < "cde";
+     return 0;
+}

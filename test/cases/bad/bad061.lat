@@ -1,0 +1,12 @@
+// Return void
+
+int main() {
+    return 0;
+}
+
+void f() {
+    return g();
+}
+
+void g() {
+}

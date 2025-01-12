@@ -1,0 +1,6 @@
+// Only class can be instantiated
+
+int main() {
+    new int[];
+    return 0;
+}

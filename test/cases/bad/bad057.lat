@@ -1,0 +1,7 @@
+// Invalid int range
+
+int main() {
+    int x = 9223372036854775807;
+    int y = 9223372036854775808;
+    return 0;
+}

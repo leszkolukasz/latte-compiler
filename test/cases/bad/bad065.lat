@@ -1,0 +1,19 @@
+class A {
+
+}
+
+class B {
+
+}
+
+A foo(boolean x) {
+    if (x) {
+        return null;
+    } else {
+        return new B;
+    }
+}
+
+int main() {
+    return 0;
+}

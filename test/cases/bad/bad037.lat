@@ -1,0 +1,18 @@
+// Not a member
+
+class A {
+
+}
+
+class B extends A {
+    int x;
+}
+
+int main() {
+    A a = new A;
+    // new B.x; // ok
+
+    a.x;
+
+    return 0;
+}

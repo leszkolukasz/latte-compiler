@@ -1,0 +1,29 @@
+class A {
+}
+
+int main() {
+    A a;
+
+    assert(null == null);
+    assert(!(null != null));
+    assert(a == null);
+
+    a = new A;
+
+    assert(!(a == null));
+    assert(a != null);
+    assert(a == a);
+
+    A a2 = new A;
+
+    assert(!(a == a2));
+    assert(a != a2);
+
+    return 0;
+}
+
+void assert(boolean b) {
+  if (!b) {
+    error();
+  }
+}

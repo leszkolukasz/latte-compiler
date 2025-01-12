@@ -1,0 +1,6 @@
+// Not lvalue
+
+int main() {
+    0 = 42;
+    return 0;
+}

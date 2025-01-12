@@ -1,0 +1,33 @@
+int main() {
+    printBool("" == "");
+    printBool("abc" == "abc");
+    printBool("abc" != "ab");
+    printBool("abc" != "abcd");
+    printBool("abc" != "abd");
+
+    string s;
+    printBool(s == s);
+    printBool(s != s);
+    printBool(s == "");
+    printBool(s != "");
+    printBool(s == "" * 2);
+    printBool(2 * s == s * 2);
+
+    s = "a";
+    printBool(s == s);
+    printBool(s != s);
+    printBool(s == "a");
+    printBool(s != "a");
+    printBool(s == "a" * 2);
+    printBool(2 * s == s * 2);
+
+    return 0;
+}
+
+void printBool(boolean b) {
+    if (b) {
+        printString("true");
+    } else {
+        printString("false");
+    }
+}

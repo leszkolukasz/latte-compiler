@@ -1,0 +1,27 @@
+int main() {
+    printBool(0 == 0);
+    printBool(0 <= 0);
+    printBool(0 >= 0);
+    printBool(0 != 0);
+    printBool(0 > 0);
+    printBool(0 < 0);
+
+    int x = -10, y = 10;
+    printBool(x == y);
+    printBool(x == -y);
+    printBool(x <= y);
+    printBool(x < y);
+    printBool(x != y);
+    printBool(x > y);
+    printBool(x >= y);
+
+    return 0;
+}
+
+void printBool(boolean b) {
+    if (b) {
+        printString("true");
+    } else {
+        printString("false");
+    }
+}

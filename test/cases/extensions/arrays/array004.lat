@@ -1,0 +1,20 @@
+int[] gen() {
+  int[] arr = new int[10];
+  int i = 0;
+  while (i < 10) {
+    arr[i] = i+1;
+    i++;
+  }
+
+  return arr;
+} 
+
+int main() {
+  int[] arr = gen();
+
+  for (int a: arr) {
+    printInt(a);
+  }
+
+  return 0;
+}

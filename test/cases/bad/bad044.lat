@@ -1,0 +1,14 @@
+// Not assignable
+
+class A {}
+
+class B1 extends A {}
+
+class B2 extends A {}
+
+
+int main() {
+    B1 b = (B2) null;
+
+    return 0;
+}

@@ -1,0 +1,7 @@
+// Not lvalue
+
+int main() {
+    string s = "str";
+    s[0] = "2";
+    return 0;
+}

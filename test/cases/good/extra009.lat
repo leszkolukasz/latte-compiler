@@ -1,0 +1,6 @@
+int main() {
+    string[] s = new string[1];
+    s[0] = "hello";
+    printString(s[0]);
+    return 0;
+}

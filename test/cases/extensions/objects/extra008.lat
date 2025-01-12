@@ -1,0 +1,18 @@
+class A {
+
+}
+
+void check_null(A a) {
+    if (a == null) {
+        printString("null");
+    } else {
+        printString("A");
+    }
+}
+
+int main() {
+    check_null(null);
+    check_null(new A);
+
+    return 0;
+}

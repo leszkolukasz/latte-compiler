@@ -1,0 +1,17 @@
+// Cannot override
+
+class X {    
+    int foo() {
+        return 42;
+    }
+}
+
+class Y extends X {
+    string foo() {
+        return "str";
+    }
+}
+
+int main() {
+    return 0;
+}

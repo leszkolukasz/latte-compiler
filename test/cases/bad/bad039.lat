@@ -1,0 +1,12 @@
+// Not indexable
+
+class A {
+
+}
+
+int main() {
+    // (new A[5])[0]; // ok
+    (new A)[3];
+
+    return 0;
+}

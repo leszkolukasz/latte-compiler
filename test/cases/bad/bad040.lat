@@ -1,0 +1,11 @@
+// Not callable
+
+class A {
+
+}
+
+int main() {
+    new A(3);
+
+    return 0;
+}

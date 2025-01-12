@@ -1,0 +1,86 @@
+int foo(int l) {
+    l++;
+    return l;
+}
+
+void empty() {
+
+}
+
+void empty2() {
+    return;
+}
+
+class X {
+    int i;
+    X x;
+    Y y;
+
+    int test(int x) {
+        return x;
+    }
+
+    int foo(int x) {
+        return 1;
+    }
+}
+
+class Y extends X {
+    X x;
+
+    int foo(int y) {
+        return y;
+    }
+
+    Y yy(int z) {
+        return y;
+    }
+}
+
+class Z extends Y {
+
+}
+
+
+int main() {
+    int x, y, z;
+    string s;
+    x++;
+
+    (new X[][2])[0];
+
+    int[] x2 = new int[1];
+    int[][][] y2;
+    int[][] z2 = new int[][2];
+    x2[0] = foo(x2[0]);
+
+    int len = x2.length;
+
+    {
+        int z = z;
+        int a = x;
+    }
+
+
+    for (int x2: x2) {
+        x2++;
+    }
+
+    for (int x2: x2) int x2 = x2;
+
+    Z zz = new Z;
+    zz.test(10);
+
+    zz.i = x2.length;
+
+    X objX = new X;
+    Z objZ = new Z;
+
+    objX = objZ;
+    
+    if (false) {
+        return x;
+    } else {
+        if (true) return y;
+    }
+}

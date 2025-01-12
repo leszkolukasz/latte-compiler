@@ -1,0 +1,7 @@
+// Invalid void use
+
+int main() {
+    return 0;
+}
+
+void foo(void[] v) {}

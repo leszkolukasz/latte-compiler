@@ -1,0 +1,70 @@
+// Some null tests
+
+class A {
+
+}
+
+class A2 extends A {
+
+}
+
+class B {
+
+}
+
+A foo(boolean x) {
+    if (x) {
+        return new A;
+    } else {
+        return null;
+    }
+}
+
+A foo2(boolean x) {
+    if (x) {
+        return new A2;
+    } else {
+        return null;
+    }
+}
+
+A foo3(boolean x) {
+    if (x) {
+        return null;
+    } else {
+        return new A;
+    }
+}
+
+A foo4(boolean x) {
+    if (x) {
+        return null;
+    } else {
+        return new A2;
+    }
+}
+
+A foo5(boolean x) {
+    if (x) {
+        return null;
+    } else {
+        return null;
+    }
+}
+
+int main() {
+    printBool(null == null);
+    printBool(new A == null);
+    printBool(new B == null);
+    printBool(new A == new A2);
+
+    return 0;
+}
+
+void printBool(boolean b) {
+    if (b) {
+        printString("true");
+    } else {
+        printString("false");
+    }
+}

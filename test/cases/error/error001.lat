@@ -1,0 +1,10 @@
+int main() {
+    printInt(10);
+    printString("str");
+    string s = readString();
+    int i = readInt();
+
+    error();
+
+    // error should act as return
+}

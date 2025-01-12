@@ -1,0 +1,8 @@
+// Reserved keyword
+
+void foo(int self) {
+    
+}
+
+int main() {
+}

@@ -1,0 +1,74 @@
+class A {
+    int x;
+
+    A initA() {
+        x = 1;
+        return self;
+    }
+}
+
+class B extends A {
+    B initB() {
+        x = 2;
+        return self;
+    }
+}
+
+class C1 extends B {
+    C1 initC1() {
+        x = 31;
+        return self;
+    }
+}
+
+class C2 extends B {
+    C2 initC2() {
+       x = 32;
+       return self;
+    }
+}
+
+int main() {
+    printInt(getA(true).x);
+    printInt(getA(false).x);
+    printInt(getA2(true).x);
+    printInt(getA2(false).x);
+    printInt(getB(true).x);
+    printInt(getB(false).x);
+    printInt(getB2(true).x);
+    printInt(getB2(false).x);
+
+    return 0;
+}
+
+A getA(boolean b) {
+  if (b) {
+    return (new C1).initC1();
+  } else {
+    return (new C2).initC2();
+  }
+}
+
+A getA2(boolean b) {
+  if (b) {
+    return (new B).initB();
+  } else {
+    return (new C2).initC2();
+  }
+}
+
+B getB(boolean b) {
+  if (b) {
+    return (new C1).initC1();
+  } else {
+    return (new C2).initC2();
+  }
+}
+
+A getB2(boolean b) {
+  if (b) {
+    return (new B).initB();
+  } else {
+    return (new C2).initC2();
+  }
+}

@@ -1,0 +1,18 @@
+boolean b_true() {
+    printInt(1);
+    return true;
+}
+
+boolean b_false() {
+    printInt(0);
+    return false;
+}
+
+int main() {
+    b_true() || b_false();
+    b_false() || b_true(); 
+    b_true() && b_false();
+    b_false() && b_true();
+
+    return 0;
+}

@@ -1,0 +1,19 @@
+// Invalid return type
+
+class A {
+}
+
+class B extends A {
+}
+
+int main() {
+    return 0;
+}
+
+//A ok() {
+//    return new B;
+//}
+
+B bad() {
+    return new A;
+}

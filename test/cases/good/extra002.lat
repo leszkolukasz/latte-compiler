@@ -1,0 +1,145 @@
+// GPT helped
+
+int main() {
+    int x = 0;
+    int y = 0;
+
+    // Example 1
+    while (x < 10 && y < 10) {
+        x++; y++;
+    }
+    assert(x, 10);
+    assert(y, 10);
+
+    // Example 2
+    x = 0; y = 10;
+    while (x < 10 && y >= 1) {
+        x++; y--;
+    }
+    assert(x, 10);
+    assert(y, 0);
+
+    // Example 3
+    x = 5; y = 5;
+    while (x >= 0 && y <= 10) {
+        x--; y++;
+    }
+    assert(x, -1);
+    assert(y, 11);
+
+    // Example 4
+    x = 0; y = 0;
+    while (x <= 20 || y != 15) {
+        x = x + 2; y++;
+    }
+    assert(x, 30);
+    assert(y, 15);
+
+    // Example 5
+    x = 0; y = 0;
+    while (x != 10 && y == 0) {
+        x++;
+        if (x == 5) {
+            y = 1;
+        }
+    }
+    assert(x, 5);
+    assert(y, 1);
+
+    // Example 6
+    x = 10; y = 0;
+    while (x >= 0 && !(y == 5)) {
+        x--; y++;
+    }
+    assert(x, 5);
+    assert(y, 5);
+
+    // Example 7
+    x = 0; y = 0;
+    while (!(x > 5) || y < 10) {
+        x++; y++;
+    }
+    assert(x, 10);
+    assert(y, 10);
+
+    // Example 8
+    x = 1; y = 10;
+    while (x < 20 && (y > 0 || x < 10)) {
+        x = x + 2; y--;
+    }
+    assert(x, 21);
+    assert(y, 0);
+
+    // Example 9
+    x = 0; y = 20;
+    while (x < 15 && !(y < 10)) {
+        x = x + 3; y = y - 2;
+    }
+    assert(x, 15);
+    assert(y, 10);
+
+    // Example 10
+    x = 10; y = 5;
+    while (x > 0 || y <= 10) {
+        if (x > 0) {
+            x--;
+        } else {
+            y++;
+        }
+    }
+    assert(x, 0);
+    assert(y, 11);
+
+    // Example 11
+    x = 0; y = 0;
+    while (!(x == 10) && !(y == 10)) {
+        x++; y++;
+    }
+    assert(x, 10);
+    assert(y, 10);
+
+    // Example 12
+    x = 5; y = 0;
+    while (x > 0 && (y < 5 || x > 1)) {
+        x--; y++;
+    }
+    assert(x, 0);
+    assert(y, 5);
+
+    // Example 13
+    x = 0; y = 10;
+    while (x < 10 && (y > 0 || !(x % 2 == 1))) {
+        x++; y = y - 2;
+    }
+    assert(x, 5);
+    assert(y, 0);
+
+    // Example 14
+    x = 0; y = 0;
+    while (!(x == 10 && y == 10)) {
+        if (x < 10) {
+            x++;
+        }
+        if (y < 10) {
+            y++;
+        }
+    }
+    assert(x, 10);
+    assert(y, 10);
+
+    // Example 15
+    x = 20; y = 0;
+    while ((x > 10 && y < 5) || !(y > 0)) {
+        x--; y++;
+    }
+    assert(x, 15);
+    assert(y, 5);
+
+    return 0;
+}
+
+void assert(int expected, int actual) {
+    if (expected != actual) {
+        error();
+    }
+}

@@ -1,0 +1,71 @@
+class String {
+    char[] data;
+
+    String add(String other) {
+        char[] self_data = self.data;
+        char[] other_data = other.data;
+
+        int self_len = self_data.length;
+        int other_len = other_data.length;
+        int total_len = self_len + other_len;
+
+        char[] data = new char[total_len];
+
+        int i = 0;
+        while(i < self_len) {
+            data[i] = self_data[i];
+            i++;
+        }
+
+        while (i < total_len) {
+            data[i] = other_data[i - self_len];
+            i++;
+        }
+
+        String res = new String;
+        res.data = data;
+
+        return res;
+    }
+
+     String times(int n) {
+        char[] self_data = self.data;
+        int self_len = self_data.length;
+        int total_len = self_len * n;
+
+        char[] data = new char[total_len];
+
+        int i = 0;
+        while(i < total_len) {
+            data[i] = self_data[i % self_len];
+            i = i + 1;
+        }
+
+        String res = new String;
+        res.data = data;
+
+        return res;
+    }
+
+    boolean eq(String other) {
+        char[] self_data = self.data;
+        char[] other_data = other.data;
+
+        int self_len = self_data.length;
+        int other_len = other_data.length;
+
+        if (self_len != other_len) {
+            return false;
+        }
+
+        int i = 0;
+        while (i < self_len) {
+            if (self_data[i] != other_data[i]) {
+                return false;
+            }
+            i++;
+        }
+
+        return true;
+    }
+}

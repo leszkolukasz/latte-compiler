@@ -1,0 +1,16 @@
+// Not a subclass
+
+class A {
+
+}
+
+class B extends A {
+
+}
+
+int main() {
+    // A a = new A; // ok
+    B b = new A;
+
+    return 0;
+}

@@ -1,0 +1,15 @@
+[package]
+name = "compiler"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ariadne = "0.4.1"
+peg = "0.8.4"
+thiserror = "2.0.3"
+anyhow = "1.0.93"
+maplit = "1.0.2"
+strum = "0.26"
+strum_macros = "0.26"
+paste = "1.0.15"
+tempfile = "3.14.0"

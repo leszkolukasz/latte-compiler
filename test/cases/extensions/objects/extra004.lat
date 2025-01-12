@@ -1,0 +1,33 @@
+class A {
+  int x;
+  A a;
+
+  void print() {
+    printInt(x);
+  }
+}
+
+class B extends A {
+  A a;
+}
+
+int main() {
+  A a = new A;
+  a.x = 1;
+  a.a = new A;
+
+  a.a.x = 2;
+  a.a.a = new B;
+
+  a.a.a.x = 3;
+  a.a.a.a = new A;
+
+  a.a.a.a.x = 4;
+
+  a.a.a.a.print();
+  a.a.a.print();
+  a.a.print();
+  a.print();
+
+  return 0;
+}

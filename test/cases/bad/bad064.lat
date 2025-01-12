@@ -1,0 +1,5 @@
+int main() {
+    string s;
+    s - s;
+    return 0;
+}

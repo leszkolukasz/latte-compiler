@@ -1,0 +1,22 @@
+class A {
+  int[] x;
+}
+
+class B extends A {
+}
+
+int main() {
+    A a = new A;
+    a.x = new int[10];
+
+    A[] arr = new A[10];
+    arr[0] = a;
+
+    printInt(foo(new B[10]));
+
+    return 0;
+}
+
+int foo(A[] arr) {
+    return arr.length;
+}

@@ -1,0 +1,23 @@
+// Invalid return type
+
+class A {}
+
+class B extends A {}
+
+class C1 extends B {}
+
+class C2 extends B {}
+
+
+
+int main() {
+    return 0;
+}
+
+C2 bad() {
+    if (true) {
+        return new C1;
+    } else {
+        return new C2;
+    }
+}

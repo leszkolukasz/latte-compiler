@@ -1,0 +1,6 @@
+// Not lvalue
+
+int main() {
+    (new string[10]).length = 11;
+    return 0;
+}

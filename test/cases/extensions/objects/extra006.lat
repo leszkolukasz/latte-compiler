@@ -1,0 +1,16 @@
+class A {
+  void foo() {
+    outside();
+  }
+}
+
+void outside() {
+  printString("outside");
+}
+
+int main() {
+  A a = new A;
+  a.foo();
+
+  return 0;
+}

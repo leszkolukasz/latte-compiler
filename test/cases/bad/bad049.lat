@@ -1,0 +1,10 @@
+// Repeated member
+
+class X {
+    int x;
+    int x;
+}
+
+int main() {
+    return 0;
+}

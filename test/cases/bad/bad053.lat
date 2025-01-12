@@ -1,0 +1,6 @@
+// Invalid type
+
+int main() {
+    string s = "str";
+    s++;
+}

@@ -1,0 +1,14 @@
+// class as expression
+
+class A {
+}
+
+class B extends A {
+}
+
+
+
+int main() {
+     cast<A>(B);
+     return 0;
+}

@@ -1,0 +1,38 @@
+class A {
+  int x;
+
+  void print() {
+    printInt(x);
+    printInt(self.x);
+    printVirtual();
+    self.printVirtual();
+  }
+
+  void printVirtual() {
+    printString("A");
+  }
+}
+
+class B extends A {
+  void printVirtual() {
+    printString("B");
+  }
+}
+
+void printVirtual() {
+  printString("not this function");
+}
+
+int main() {
+  A a = new A;
+  a.x = 10;
+  a.print();
+  a.printVirtual();
+
+  A b = new B;
+  b.x = 20;
+  b.print();
+  b.printVirtual();
+
+  return 0;
+}

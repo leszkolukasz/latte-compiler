@@ -1,0 +1,15 @@
+class A {
+
+}
+
+int main() {
+    cast<int>(10);
+    cast<boolean>(true);
+    cast<int[]>(new int[10]);
+    cast<A>(new A);
+    cast<A>(null);
+    cast<A[]>(new A[10]);
+    cast<string>("hello");
+
+    return 0;
+}

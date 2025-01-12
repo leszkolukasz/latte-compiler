@@ -1,0 +1,10 @@
+// Conflicting return type
+
+int foo() {
+    if (true) return 10;
+    else return "10";
+}
+
+int main() {
+    return 0;
+}

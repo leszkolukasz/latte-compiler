@@ -1,0 +1,6 @@
+// Undeclared class
+
+int main() {
+    new X;
+    return 0;
+}
