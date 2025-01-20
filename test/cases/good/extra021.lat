@@ -1,0 +1,19 @@
+int main() {
+    string s;
+    string[] arr = new string[1];
+
+    for(char c: s) {
+        printChar(c);
+    }
+
+    for(string s: arr) {
+        for(char c: s) {
+            printChar(c);
+        }
+    }
+
+    printInt(s.length);
+    printInt(arr[0].length);
+
+    return 0;
+}

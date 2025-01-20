@@ -365,6 +365,10 @@ impl<'a>  Context<'a> {
         }
     }
 
+    pub fn find_free_register(&self) -> Option<Register> {
+        self.free_registers.back().cloned()
+    }
+
     pub fn free_any_register_with_disallowed(
         &mut self,
         disallowed: &[&Register],
@@ -425,8 +429,63 @@ impl<'a>  Context<'a> {
 
     // Ensures that given operands are in given registers.
     // Tries to perform minimal amount of moves.
+    // Destination registers must appear only once in constraints.
     #[allow(suspicious_double_ref_op)]
     pub fn move_to(&mut self, constraints: &[(&Operand, &Register)]) -> ASM {
+        let mut constraints: Vec<(Operand, Register)> = constraints
+            .iter()
+            .map(|(op, reg)| (op.clone().clone(), reg.clone().clone()))
+            .collect();
+
+        let mut asm = ASM::new();
+        let mut operand_set: HashSet<Operand> = HashSet::new();
+        let mut operand_checkpoints: Vec<Checkpoint> = vec![];
+        let mut operand_new_vars: Vec<Var> = vec![];
+
+        for (_, reg) in constraints.iter() {
+            let op = Operand::Reg(reg.clone());
+            if operand_set.contains(&op) {
+                panic!("Destination registers must appear only once in constraints.");
+            }
+
+            operand_set.insert(op.clone());
+        }
+
+        operand_set.clear();
+
+        let mut idx = 0;
+        while idx < constraints.len() {
+            let op = &constraints[idx].0;
+
+            if !operand_set.contains(op) {
+                operand_set.insert(op.clone());
+                idx += 1;
+                continue;
+            }
+
+            // This algorithm does not work well with the same operand appearing multiple times in source positions.
+            // Ugly solution is to copy them to new operands.
+
+            if let Some(r) = self.find_free_register() {
+                assert!(self.free_register(&r).is_empty());
+                asm.push_back(asm::MOV(Operand::Reg(r.clone()), op.clone()));
+
+                operand_checkpoints.push(self.save(&Operand::Reg(r.clone())));
+                constraints[idx].0 = Operand::Reg(r.clone());
+            } else {
+                let new_var = self.new_tmp();
+                let new_loc = self.new_stack_loc();
+
+                self.add_var(&new_var, &new_loc, false);
+                asm.push_back(asm::MOV(new_loc.to_operand(), op.clone()));
+
+                operand_new_vars.push(new_var);
+                constraints[idx].0 = new_loc.to_operand();
+            }
+
+            idx += 1;
+        }
+
         let mut cycles: Vec<Vec<Operand>> = vec![];
         let mut paths_that_end_with_free_reg: Vec<Vec<Operand>> = vec![];
         let mut paths_that_end_with_non_free_reg: Vec<Vec<Operand>> = vec![];
@@ -435,19 +494,19 @@ impl<'a>  Context<'a> {
         let mut start_points: Vec<Operand> = vec![];
         let mut graph: HashMap<Operand, Operand> = HashMap::new();
 
-        for (from, to) in constraints {
+        for (from, to) in constraints.iter() {
             graph.insert(from.clone().clone(), Operand::Reg(to.clone().clone()));
         }
 
         // Start points are operands that have in-degree 0.
-        for (from, _to) in constraints {
-            if !graph.values().any(|v| v == *from) {
+        for (from, _to) in constraints.iter() {
+            if !graph.values().any(|v| v == from) {
                 start_points.push(from.clone().clone());
             }
         }
 
         // Remaining points are on cycles.
-        for (from, _to) in constraints {
+        for (from, _to) in constraints.iter() {
             if !start_points.contains(from) {
                 start_points.push(from.clone().clone());
             }
@@ -471,8 +530,6 @@ impl<'a>  Context<'a> {
                 }
             }
         }
-
-        let mut asm = ASM::new();
 
         for cycle in cycles {
             if cycle.len() == 1 {
@@ -504,7 +561,7 @@ impl<'a>  Context<'a> {
 
         // All registers where something is moved to are disallowed.
         let mut disallowed: HashSet<&Register> =
-            constraints.iter().map(|(_, r)| r.clone()).collect();
+            constraints.iter().map(|(_, r)| r).collect();
 
         // All registers at the start of path that end with non-free register are disallowed for now
         // They will be added one by one later.
@@ -528,6 +585,9 @@ impl<'a>  Context<'a> {
                 ));
             }
         }
+
+        operand_checkpoints.into_iter().for_each(|c| { self.load(c); });
+        operand_new_vars.into_iter().for_each(|v| { self.remove_var(&v); });
 
         asm
     }

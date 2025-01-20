@@ -4,7 +4,7 @@ use crate::backend::top_level::EXTERNAL_FUNCTIONS;
 use crate::backend::utils::to_dummy_enriched;
 use crate::backend::{asm, statement, utils, Checkpoint, Context, Loc, ASM};
 use crate::common::{Enriched, LineCol, PtrList};
-use crate::parser::{BinaryOp, Expr, IntValue, Stmt, Type, UnaryOp, Value};
+use crate::parser::{BinaryOp, Block, DeclItem, Expr, IntValue, Stmt, Type, UnaryOp, Value};
 use crate::{Ext, NodeData};
 use anyhow::Result;
 use maplit::hashset;
@@ -421,7 +421,132 @@ fn compile_new_array(
         Operand::Reg(reg.0.clone()),
     ));
 
-    Ok((asm, Operand::Reg(Register::RAX), None))
+    let mut res_op = Operand::Reg(Register::RAX);
+
+    // Strings need to be initialized
+    if t == &Type::Str {
+        let res_checkpoint = context.save(&res_op);
+
+        let res_var = res_checkpoint.get_var().unwrap();
+        let res_var_type = Type::Array(Box::new(Type::Str));
+
+        let idx_loc = context.new_stack_loc();
+        let len_loc = context.new_stack_loc();
+
+        let idx_var = context.new_tmp();
+        let len_var = context.new_tmp();
+
+        context.add_var(&idx_var, &idx_loc, false);
+        context.add_var(&len_var, &len_loc, false);
+
+        let mut block_stmts: Block<Ext> = PtrList::new();
+
+        let mut decl_ptr_list: PtrList<Enriched<DeclItem<Ext>, Ext>> = PtrList::new();
+        decl_ptr_list.push(Box::new(to_dummy_enriched(
+            DeclItem::Init(
+                Box::new(idx_var.clone()),
+                Box::new(to_dummy_enriched(
+                    Expr::Literal(Box::new(Value::Num(IntValue::Parsed(0)))),
+                    Some(Type::Int),
+                )),
+            ),
+            None,
+        )));
+        decl_ptr_list.push(Box::new(to_dummy_enriched(
+            DeclItem::Init(
+                Box::new(len_var.clone()),
+                Box::new(to_dummy_enriched(
+                    Expr::Member(
+                        Box::new(to_dummy_enriched(
+                            Expr::Ident(Box::new(res_var.clone())),
+                            Some(res_var_type.clone()),
+                        )),
+                        Box::new("length".to_string()),
+                    ),
+                    Some(Type::Int),
+                )),
+            ),
+            None,
+        )));
+        let decl_stmt: Enriched<Stmt<Ext>, Ext> = to_dummy_enriched(
+            Stmt::Decl(Box::new(Type::Int), Box::new(decl_ptr_list)),
+            None,
+        );
+        block_stmts.push(Box::new(decl_stmt));
+
+        let mut while_block: Block<Ext> = PtrList::new();
+
+        let assign_stmt: Enriched<Stmt<Ext>, Ext> = to_dummy_enriched(
+            Stmt::Assign(
+                Box::new(to_dummy_enriched(
+                    Expr::Index(
+                        Box::new(to_dummy_enriched(
+                            Expr::Ident(Box::new(res_var.clone())),
+                            Some(res_var_type.clone()),
+                        )),
+                        Box::new(to_dummy_enriched(
+                            Expr::Ident(Box::new(idx_var.clone())),
+                            Some(Type::Int),
+                        )),
+                    ),
+                    Some(Type::Str),
+                )),
+                Box::new(to_dummy_enriched(
+                    Expr::Literal(Box::new(Value::String(Box::new("".to_string())))),
+                    Some(Type::Str),
+                )),
+            ),
+            None,
+        );
+
+        while_block.push(Box::new(assign_stmt));
+
+        let incr_stmt: Enriched<Stmt<Ext>, Ext> = to_dummy_enriched(
+            Stmt::Incr(Box::new(to_dummy_enriched(
+                Expr::Ident(Box::new(idx_var.clone())),
+                Some(Type::Int),
+            ))),
+            None,
+        );
+        while_block.push(Box::new(incr_stmt));
+
+        let while_stmt: Enriched<Stmt<Ext>, Ext> = to_dummy_enriched(
+            Stmt::While(
+                Box::new(to_dummy_enriched(
+                    Expr::Binary(
+                        BinaryOp::Lt,
+                        Box::new(to_dummy_enriched(
+                            Expr::Ident(Box::new(idx_var.clone())),
+                            Some(Type::Int),
+                        )),
+                        Box::new(to_dummy_enriched(
+                            Expr::Ident(Box::new(len_var.clone())),
+                            Some(Type::Int),
+                        )),
+                    ),
+                    None,
+                )),
+                Box::new(to_dummy_enriched(
+                    Stmt::Block(Box::new(while_block.clone())),
+                    None,
+                )),
+            ),
+            None,
+        );
+
+        block_stmts.push(Box::new(while_stmt));
+
+        let stmt = to_dummy_enriched(Stmt::Block(Box::new(block_stmts)), None);
+        let mut stmt_res = statement::compile(context, &stmt)?;
+        asm.append(&mut stmt_res);
+
+        context.remove_var(&idx_var);
+        context.remove_var(&len_var);
+
+        res_op = context.load(res_checkpoint);
+    }
+
+    Ok((asm, res_op, None))
 }
 
 fn compile_index(
@@ -805,6 +930,16 @@ pub fn compile_binary(
                 rhs_op
             };
 
+            // This is so that `move_to` doesn't move RAX to lhs_op or rhs_op if something is in RAX
+            if let Operand::Reg(r) = &rhs_op {
+                let mut disallowed = hashset! { &Register::RAX, &Register::RDX, r };
+                if let Operand::Reg(l) = &lhs_op {
+                    disallowed.insert(l);
+                }
+
+                asm_res.append(&mut context.free_register_with_disallowed(&Register::RAX, &disallowed));
+            }
+
             asm_res.append(&mut context.move_to(&[(&lhs_op, &Register::RAX)]));
 
             let mut disallowed = hashset! { &Register::RAX };
@@ -1151,7 +1286,9 @@ pub fn compile_apply(
         }
         _ => {
             let method_expr = if is_implicit_method {
-                let Expr::Ident(name) = &ident.0 else { unreachable!() };
+                let Expr::Ident(name) = &ident.0 else {
+                    unreachable!()
+                };
                 to_dummy_enriched(
                     Expr::Member(
                         Box::new(to_dummy_enriched(

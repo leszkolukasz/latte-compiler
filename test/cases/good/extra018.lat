@@ -1,0 +1,56 @@
+int p(int x) {
+    return x * 3 + 7;
+}
+
+int q(int x, int y) {
+    return (p(x) - p(y)) % 13;
+}
+
+int r(int x, int y, int z) {
+    int temp = q(x, x);
+    return p(temp) + q(temp, x);
+}
+
+int s(int x, int y, int z, int w) {
+    int part1 = r(x, x, x);
+    int part2 = r(x, x, x);
+    return part1 * part2 - q(x, x);
+}
+
+int t(int x, int y, int z, int w, int v) {
+    return s(x, x, x, x) + r(x, x, x);
+}
+
+int u(int x, int y, int z) {
+    return t(x, x, x, x, x) - s(x, x, x, x);
+}
+
+int main() {
+    int a = 42;
+    int b = 621;
+
+    printInt(a);
+
+    int result1 = p(a);
+    printInt(result1);
+
+    int result2 = q(5, 5);
+    printInt(result2);
+
+    int result3 = r(5, a, 5);
+    printInt(result3);
+
+    int result4 = s(a, 5, a, 5);
+    printInt(result4);
+
+    int result5 = t(5, a, 5, a, 5);
+    printInt(result5);
+
+    int result6 = t(b, a, b, a, 5);
+    printInt(result6);
+
+    int result7 = u(5, 5, a);
+    printInt(result7);
+
+    return 0;
+}

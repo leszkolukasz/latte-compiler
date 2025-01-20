@@ -1,0 +1,18 @@
+int a(int x) {
+    return x;
+}
+int b(int x) {
+    return a(x * 2 + 10);
+}
+int c(int x, int y) {
+    return a(x) - b(y);
+}
+int d(int x, int y, int z) {
+    return c(x + a(y), b(c(a(z + x), y))) - b(c(z, z));
+}
+int main() {
+    int x = readInt();
+    printInt(x);
+    printInt(d(x, 2 * x, 3 * x));
+    return 0;
+}

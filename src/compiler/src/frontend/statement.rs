@@ -119,7 +119,7 @@ pub fn check_for(
     }
 
     let item_type = item_type.unwrap();
-    if &item_type != typ {
+    if !&item_type.is_assignable_to(typ, context) {
         bail!(TypecheckerError::InvalidType(
             Some(array.1.clone()),
             item_type,

@@ -1,0 +1,55 @@
+int modTest1(int x, int y) {
+    return x % y;
+}
+
+int modTest2(int x) {
+    return x % 2;
+}
+
+int divTest1(int x, int y) {
+    return x / y;
+}
+
+int divModCombined(int x, int y, int z) {
+    return (x / y) % z;
+}
+
+int nestedModDiv(int x, int y, int z) {
+    int modPart = modTest1(x, y);
+    int divPart = divTest1(y, z);
+    return modPart + divPart;
+}
+
+int combinedComplex(int x, int y, int z, int w) {
+    int part1 = divModCombined(x, y, z);
+    int part2 = nestedModDiv(y, z, w);
+    return modTest1(part1, part2) + divTest1(part2, part1);
+}
+
+
+int main() {
+    int a = 8;
+    int b = 4;
+    int c = 3;
+    int d = 2;
+
+    int result1 = modTest1(a, b);
+    printInt(result1);
+
+    int result2 = modTest2(c);
+    printInt(result2);
+
+    int result3 = divTest1(a, b);
+    printInt(result3);
+
+    int result4 = divModCombined(a, b, c);
+    printInt(result4);
+
+    int result5 = nestedModDiv(a, b, c);
+    printInt(result5);
+
+    int result6 = combinedComplex(a, b, c, d);
+    printInt(result6);
+
+    return 0;
+}

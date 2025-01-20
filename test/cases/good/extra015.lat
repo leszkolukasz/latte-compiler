@@ -1,0 +1,55 @@
+int a(int x) {
+    return x * 2 + 3;
+}
+
+int b(int x) {
+    return a(x) - 5;
+}
+
+int c(int x, int y) {
+    printInt(x);
+    printInt(y);
+    return (a(x) * b(y)) % 10;
+}
+
+int d(int x, int y, int z) {
+    printInt(x);
+    printInt(y);
+    printInt(z);
+    int temp1 = c(x + y, z - x);
+    int temp2 = c(z, x) + b(y);
+    return temp1 - temp2 + a(b(z));
+}
+
+int e(int x, int y, int z, int w) {
+    printInt(w);
+    int part1 = c(a(x), b(y));
+    int part2 = d(z, w, y);
+    int part3 = a(c(w, z));
+    return part1 + part2 * part3;
+}
+
+int f(int x) {
+    return e(x, a(x), b(x), c(x, x));
+}
+
+int main() {
+    int x = 7;
+    int y = 12;
+    int z = 5;
+
+    printInt(x);
+    printInt(y);
+    printInt(z);
+
+    int result1 = d(x, y, z);
+    printInt(result1);
+
+    int result2 = e(x, y, z, result1);
+    printInt(result2);
+
+    int result3 = f(x);
+    printInt(result3);
+
+    return 0;
+}
